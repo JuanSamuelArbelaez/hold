@@ -1,0 +1,72 @@
+public class KnightTour {
+    // Tamaño del tablero
+    private static int BOARD_SIZE = 5;
+
+    // Matriz que representa el tablero
+    private int[][] board;
+
+    // Movimientos posibles del caballo
+    private int[] moveX = {2, 1, -1, -2, -2, -1, 1, 2};
+    private int[] moveY = {1, 2, 2, 1, -1, -2, -2, -1};
+
+    // Constructor
+    public KnightTour() {
+        board = new int[BOARD_SIZE][BOARD_SIZE];
+    }
+
+    // Función para imprimir la solución
+    public void printSolution() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    // Función para comprobar si un movimiento es válido
+    public boolean isSafe(int x, int y) {
+        return (x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE && board[x][y] == 0);
+    }
+
+    // Función para realizar el salto del caballo
+    public boolean solve(int x, int y, int move) {
+        // Comprobar si se han recorrido todas las casillas
+        if (move == BOARD_SIZE * BOARD_SIZE) {
+            return true;
+        }
+        // Recorrer todos los movimientos posibles
+        for (int i = 0; i < 8; i++) {
+            int nextX = x + moveX[i];
+            int nextY = y + moveY[i];
+
+            // Comprobar si el movimiento es válido
+            if (isSafe(nextX, nextY)) {
+                board[nextX][nextY] = move + 1;
+
+                // Llamada recursiva con el siguiente movimiento
+                if (solve(nextX, nextY, move + 1)) {
+                    return true;
+                }
+
+                // Si no se ha encontrado solución, deshacer el movimiento
+                board[nextX][nextY] = 0;
+            }
+        }
+        // No se ha encontrado solución
+        return false;
+    }
+
+    public static void main(String[] args) {
+        KnightTour kt = new KnightTour();
+
+        // Colocar el caballo en la esquina superior izquierda
+        kt.board[0][0] = 1;
+
+        // Resolver el problema
+        if (kt.solve(0, 0, 1)) {
+            kt.printSolution();
+            System.out.println("la solucion es la matriz mencionada");
+        } else System.out.println();
+    }
+}
